@@ -11,5 +11,6 @@ data class Product(
         val name: String,
         val description: String,
         val price: Double,
-        val createdAt: Date = Date()
+        val createdAt: Date = Date(),
+        val updatedAt: Date = Date()
 )

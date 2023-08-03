@@ -1,5 +1,8 @@
 package dev.umuterarslan.productservice.service;
 
+import dev.umuterarslan.productservice.dto.request.CreateProductRequest;
+import dev.umuterarslan.productservice.dto.request.UpdateProductRequest;
+import dev.umuterarslan.productservice.dto.response.*;
 import dev.umuterarslan.productservice.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 

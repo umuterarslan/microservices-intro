@@ -1,8 +1,8 @@
-package dev.umuterarslan.prodcutservice.dto.request
+package dev.umuterarslan.productservice.dto.request
 
 import java.util.*
 
-data class UpdateProductRequest(
+data class CreateProductRequest(
         val id: UUID,
         val name: String,
         val description: String,

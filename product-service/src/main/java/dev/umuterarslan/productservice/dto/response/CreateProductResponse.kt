@@ -1,4 +1,4 @@
-package dev.umuterarslan.prodcutservice.dto.response
+package dev.umuterarslan.productservice.dto.response
 
 import java.util.*
 

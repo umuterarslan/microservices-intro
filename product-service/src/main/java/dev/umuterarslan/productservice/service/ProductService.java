@@ -1,6 +1,6 @@
-package dev.umuterarslan.prodcutservice.service;
+package dev.umuterarslan.productservice.service;
 
-import dev.umuterarslan.prodcutservice.repository.ProductRepository;
+import dev.umuterarslan.productservice.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 @Service

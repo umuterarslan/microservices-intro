@@ -1,8 +1,8 @@
-package dev.umuterarslan.prodcutservice.dto.response
+package dev.umuterarslan.productservice.dto.response
 
 import java.util.*
 
-data class GetProductsPaginatedResponse(
+data class UpdateProductResponse(
         val id: UUID,
         val name: String,
         val description: String,

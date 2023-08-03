@@ -1,4 +1,4 @@
-package dev.umuterarslan.prodcutservice;
+package dev.umuterarslan.productservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

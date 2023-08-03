@@ -1,4 +1,4 @@
-package dev.umuterarslan.prodcutservice.model
+package dev.umuterarslan.productservice.model
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document

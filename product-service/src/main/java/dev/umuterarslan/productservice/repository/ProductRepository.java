@@ -1,6 +1,6 @@
-package dev.umuterarslan.prodcutservice.repository;
+package dev.umuterarslan.productservice.repository;
 
-import dev.umuterarslan.prodcutservice.model.Product;
+import dev.umuterarslan.productservice.model.Product;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.UUID;

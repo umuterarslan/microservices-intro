@@ -55,8 +55,11 @@ public class ProductService {
         return mapper.porductToUpdateProductResponse(savedProduct);
     }
 
-    public DeleteProductByIdResponse deleteProductById(String id) {
-        return null;
+    public void deleteProductById(String id) {
+        // an exception is thrown if product does not exist
+        rules.checkIfProductDoesntExist(id);
+
+        repository.deleteById(UUID.fromString(id));
     }
 
     private Product findProductByIdOrElseThrowAnException(String id) {

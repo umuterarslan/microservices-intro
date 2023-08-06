@@ -16,4 +16,13 @@ public class ProductExceptionHandler extends ResponseEntityExceptionHandler {
         );
         return new ResponseEntity<>(detail, detail.getHttpStatus());
     }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<?> handleProductNotFoundException(ProductNotFoundException exception) {
+        ExceptionDetail detail = new ExceptionDetail(
+                exception.getMessage(),
+                HttpStatus.NOT_FOUND
+        );
+        return new ResponseEntity<>(detail, detail.getHttpStatus());
+    }
 }

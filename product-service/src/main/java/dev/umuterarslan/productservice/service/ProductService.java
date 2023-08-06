@@ -4,10 +4,13 @@ import dev.umuterarslan.productservice.dto.request.CreateProductRequest;
 import dev.umuterarslan.productservice.dto.request.UpdateProductRequest;
 import dev.umuterarslan.productservice.dto.response.*;
 import dev.umuterarslan.productservice.exceptions.DataSaveException;
+import dev.umuterarslan.productservice.exceptions.ProductNotFoundException;
 import dev.umuterarslan.productservice.mapper.ProductServiceMapper;
 import dev.umuterarslan.productservice.model.Product;
 import dev.umuterarslan.productservice.repository.ProductRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class ProductService {
@@ -32,7 +35,9 @@ public class ProductService {
     }
 
     public GetProductByIdResponse getProductById(String id) {
-        return null;
+        Product product = findProductByIdOrElseThrowAnException(id);
+        return mapper.productToGetProductByIdResponse(product);
+
     }
 
     public GetProductsPaginatedResponse getProductsPaginated() {
@@ -45,5 +50,12 @@ public class ProductService {
 
     public DeleteProductByIdResponse deleteProductById(String id) {
         return null;
+    }
+
+    private Product findProductByIdOrElseThrowAnException(String id) {
+        return repository.findById(UUID.fromString(id))
+                .orElseThrow(() -> new ProductNotFoundException(
+                        "Product not found."
+                ));
     }
 }

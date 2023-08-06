@@ -8,9 +8,6 @@ import dev.umuterarslan.productservice.exceptions.ProductNotFoundException;
 import dev.umuterarslan.productservice.mapper.ProductServiceMapper;
 import dev.umuterarslan.productservice.model.Product;
 import dev.umuterarslan.productservice.repository.ProductRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -43,10 +40,8 @@ public class ProductService {
 
     }
 
-    public Page<GetProductsPaginatedResponse> getProductsPaginated(int pageNo, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
-        Page<Product> products = repository.findAll(pageable);
-        return mapper.productToGetProductsPaginatedResponse(products);
+    public GetProductsPaginatedResponse getProductsPaginated() {
+        return null;
     }
 
     public UpdateProductResponse updateProduct(UpdateProductRequest request) {

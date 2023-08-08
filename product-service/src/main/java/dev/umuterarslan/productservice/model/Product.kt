@@ -7,7 +7,7 @@ import java.util.*
 @Document("products")
 data class Product(
         @Id
-        val id: UUID,
+        val id: UUID = UUID.randomUUID(),
         val name: String,
         val description: String,
         val price: Double,

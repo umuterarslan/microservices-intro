@@ -7,10 +7,10 @@ import java.util.*
 @Document("products")
 data class Product(
         @Id
-        val id: UUID = UUID.randomUUID(),
+        val id: UUID,
         val name: String,
         val description: String,
         val price: Double,
-        val createdAt: Date = Date(),
-        val updatedAt: Date = Date()
+        val createdAt: Date,
+        val updatedAt: Date
 )

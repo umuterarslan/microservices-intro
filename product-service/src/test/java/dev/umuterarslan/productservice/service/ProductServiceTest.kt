@@ -21,11 +21,8 @@ import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
 import java.util.*
-import kotlin.test.assertNotEquals
 
 class ProductServiceTest {
     @Mock
@@ -171,11 +168,11 @@ class ProductServiceTest {
 
     @Test
     fun `test getProductsPaginated should return Page of GetProductsPaginatedResponse`() {
-        val pageNo = 0
+        val pageNo = 1
         val pageSize = 10
         val pageable = PageRequest.of(pageNo, pageSize)
 
-        val paginatedProducts: Page<Product> = PageImpl(listOf(
+        val products = listOf(
                 Product(
                         UUID.randomUUID(),
                         "Test Product 1",
@@ -184,35 +181,47 @@ class ProductServiceTest {
                         Date(),
                         Date()
                 )
-        ), pageable, 1)
+        )
 
-        val paginatedResponseProducts: Page<GetProductsPaginatedResponse> = PageImpl(listOf(
+        val responses = listOf(
                 GetProductsPaginatedResponse(
-                        paginatedProducts.content[0].id,
-                        paginatedProducts.content[0].name,
-                        paginatedProducts.content[0].description,
-                        paginatedProducts.content[0].price,
-                        paginatedProducts.content[0].createdAt,
-                        paginatedProducts.content[0].updatedAt
+                        products[0].id,
+                        products[0].name,
+                        products[0].description,
+                        products[0].price,
+                        products[0].createdAt,
+                        products[0].updatedAt
                 )
-        ), pageable, 1)
+        )
 
-        `when`(repository.findAll(pageable)).thenReturn(paginatedProducts)
-        `when`(mapper.productToGetProductsPaginatedResponse(paginatedProducts)).thenReturn(paginatedResponseProducts)
+        `when`(repository.findAll()).thenReturn(products)
+        `when`(mapper.productToGetProductsPaginatedResponse(products)).thenReturn(responses)
 
-        val productsPaginated = underTest.getProductsPaginated(pageNo, pageSize)
+        val result = underTest.getProductsPaginated(pageNo, pageSize)
 
-        assertEquals(productsPaginated, paginatedResponseProducts)
+        assertEquals(result.content, responses)
+        assertEquals(result.totalElements, responses.size.toLong())
     }
 
     @Test
     fun `test updateProduct should return UpdateProductResponse when product updated`() {
         val id = UUID.randomUUID()
-        val request = UpdateProductRequest(
+        val createdAt = Date()
+
+        val currentProduct = Product(
                 id,
                 "Test Product",
                 "Test Description",
-                100.0
+                100.0,
+                createdAt,
+                Date()
+        )
+
+        val request = UpdateProductRequest(
+                id.toString(),
+                "Update Test Product",
+                "Update Test Description",
+                200.0
         )
 
         val product = Product(
@@ -220,7 +229,7 @@ class ProductServiceTest {
                 request.name,
                 request.description,
                 request.price,
-                Date(),
+                createdAt,
                 Date()
         )
 
@@ -242,7 +251,8 @@ class ProductServiceTest {
                 updatedProduct.updatedAt
         )
 
-        `when`(mapper.updateProductRequestToProduct(request)).thenReturn(product)
+        `when`(repository.findById(id)).thenReturn(Optional.of(currentProduct))
+        `when`(mapper.updateProductRequestToProduct(request, createdAt)).thenReturn(product)
         `when`(repository.save(product)).thenReturn(updatedProduct)
         `when`(mapper.porductToUpdateProductResponse(updatedProduct)).thenReturn(response)
 
@@ -254,10 +264,20 @@ class ProductServiceTest {
     @Test
     fun `test updateProduct should throw DataSaveException when product not updated`() {
         val id = UUID.randomUUID()
+        val createdAt = Date()
         val exceptionMessage = "Error occurred while saving data."
 
+        val currentProduct = Product(
+            id,
+            "Test Product",
+            "Test Description",
+            100.0,
+            createdAt,
+            Date()
+        )
+
         val request = UpdateProductRequest(
-                id,
+                id.toString(),
                 "Test Product",
                 "Test Description",
                 100.0
@@ -268,14 +288,36 @@ class ProductServiceTest {
                 request.name,
                 request.description,
                 request.price,
-                Date(),
+                createdAt,
                 Date()
         )
 
-        `when`(mapper.updateProductRequestToProduct(request)).thenReturn(product)
+        `when`(repository.findById(id)).thenReturn(Optional.of(currentProduct))
+        `when`(mapper.updateProductRequestToProduct(request, createdAt)).thenReturn(product)
         `when`(repository.save(product)).thenThrow(DataSaveException(exceptionMessage))
 
         val exception = assertThrows<DataSaveException> {
+            underTest.updateProduct(request)
+        }
+
+        assertEquals(exceptionMessage, exception.message)
+    }
+
+    @Test
+    fun `test updateProduct should throw ProductNotFoundException when product not found`() {
+        val id = UUID.randomUUID()
+        val exceptionMessage = "Product not found."
+
+        val request = UpdateProductRequest(
+                id.toString(),
+                "Test Product",
+                "Test Description",
+                100.0
+        )
+
+        `when`(repository.findById(id)).thenReturn(Optional.empty())
+
+        val exception = assertThrows<ProductNotFoundException> {
             underTest.updateProduct(request)
         }
 

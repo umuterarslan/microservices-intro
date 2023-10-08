@@ -4,3 +4,7 @@ spring:
       host: localhost
       port: 27017
       database: product-service-db
+
+server:
+  servlet:
+    context-path: /api/v1

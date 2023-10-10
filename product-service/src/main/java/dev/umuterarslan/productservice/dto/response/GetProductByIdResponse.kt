@@ -7,6 +7,7 @@ data class GetProductByIdResponse(
         val name: String,
         val description: String,
         val price: Double,
+        val stock: Int,
         val createdAt: Date,
         val updatedAt: Date
 )

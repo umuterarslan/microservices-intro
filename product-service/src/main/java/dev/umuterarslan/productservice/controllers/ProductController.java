@@ -48,4 +48,10 @@ public class ProductController {
     public void deleteProductById(@PathVariable String id) {
         service.deleteProductById(id);
     }
+
+    @GetMapping("/stock/{id}/{quantity}")
+    @ResponseStatus(HttpStatus.OK)
+    public Boolean checkIfProductInStock(@PathVariable String id, @PathVariable int quantity) {
+        return service.checkIfRequestBiggerThanStock(id, quantity);
+    }
 }

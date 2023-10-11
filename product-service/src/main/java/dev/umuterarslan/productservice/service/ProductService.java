@@ -92,4 +92,15 @@ public class ProductService {
 
         return savedProduct;
     }
+
+    public Boolean checkIfRequestBiggerThanStock(String id, int quantity) {
+        boolean result = false;
+        Product product = findProductByIdOrElseThrowAnException(id);
+
+        if (quantity > product.getStock()) {
+            result = true;
+        }
+
+        return result;
+    }
 }
